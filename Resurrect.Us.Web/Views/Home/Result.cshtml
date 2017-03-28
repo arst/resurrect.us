@@ -1,0 +1,16 @@
+﻿@model string
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="row main-content">
+    <div class="col-xs-12 text-center">
+        <div class="alert alert-success center-block" role="alert">Well done! You successfully immortalized your link!</div>
+        <h2>Your resulting link:</h2>
+        <span class="label label-info url-result">@Model</span>
+        <br/>
+        <button type="button" class="btn btn-primary copy-to-clipboard">Copy to clipboard</button>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  resurrect.us.web:
+    image: resurrect.us.web
+    build:
+      context: ./Resurrect.Us.Web
+      dockerfile: Dockerfile
