@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\resurrect.us\Resurrect.Us.Data\Resurrect.Us.Data.csproj" />
-    <ProjectReference Include="..\resurrect.us\Resurrect.Us.Semantic\Resurrect.Us.Semantic.csproj" />
-    <ProjectReference Include="..\resurrect.us\Resurrect.Us.Web\Resurrect.Us.Web.csproj" />
+    <ProjectReference Include="..\Resurrect.Us.Data\Resurrect.Us.Data.csproj" />
+    <ProjectReference Include="..\Resurrect.Us.Semantic\Resurrect.Us.Semantic.csproj" />
+    <ProjectReference Include="..\Resurrect.Us.Web\Resurrect.Us.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
