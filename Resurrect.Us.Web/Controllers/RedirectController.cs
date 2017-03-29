@@ -14,10 +14,13 @@ namespace Resurrect.Us.Web.Controllers
 
         private readonly IResurrectRecordsStorageService storageService;
         private readonly IWaybackService waybackService;
-        public RedirectController(IResurrectRecordsStorageService storageService, IWaybackService waybackService)
+        private readonly IUrlCheckerService urlCheckerService;
+
+        public RedirectController(IResurrectRecordsStorageService storageService, IWaybackService waybackService, IUrlCheckerService urlChecker)
         {
             this.storageService = storageService;
             this.waybackService = waybackService;
+            this.urlCheckerService = urlChecker;
         }
 
         public async Task<IActionResult> Index(string tinyUrl)
@@ -29,10 +32,7 @@ namespace Resurrect.Us.Web.Controllers
                 return new RedirectToActionResult("Index", "Home", new object());
             }
 
-            HttpClient client = new HttpClient();
-            var response =  await client.GetAsync(record.Url);
-
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            if (await this.urlCheckerService.CheckUrl(record.Url) != System.Net.HttpStatusCode.OK)
             {
                 var wayback = await this.waybackService.GetWaybackAsync(record.Url);
 

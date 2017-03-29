@@ -7,9 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Web", "Resurre
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{DCC731DC-4F1C-43C6-A5B1-91EC5C794AA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Data", ".\Resurrect.Us.Data\Resurrect.Us.Data.csproj", "{E2F37CC8-6A57-4F97-B2FC-A727548944EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Data", "Resurrect.Us.Data\Resurrect.Us.Data.csproj", "{E2F37CC8-6A57-4F97-B2FC-A727548944EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Semantic", ".\Resurrect.Us.Semantic\Resurrect.Us.Semantic.csproj", "{BBA5C41B-3BCD-4219-88F8-EDC2F01D0775}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Semantic", "Resurrect.Us.Semantic\Resurrect.Us.Semantic.csproj", "{BBA5C41B-3BCD-4219-88F8-EDC2F01D0775}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Tests", "..\Resurrect.Us.Tests\Resurrect.Us.Tests.csproj", "{189F6E69-89C7-459F-8D0C-4770A86BDADE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BBA5C41B-3BCD-4219-88F8-EDC2F01D0775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBA5C41B-3BCD-4219-88F8-EDC2F01D0775}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBA5C41B-3BCD-4219-88F8-EDC2F01D0775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{189F6E69-89C7-459F-8D0C-4770A86BDADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{189F6E69-89C7-459F-8D0C-4770A86BDADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{189F6E69-89C7-459F-8D0C-4770A86BDADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{189F6E69-89C7-459F-8D0C-4770A86BDADE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

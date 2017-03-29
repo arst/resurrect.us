@@ -37,8 +37,10 @@ namespace Resurrect.Us.Web
             services.AddTransient<IWaybackService, WaybackService>();
             var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=resurrectus;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<ResurrectRecordsContext>(options => options.UseSqlServer(connection));
+            services.AddTransient<IUrlCheckerService, UrlCheckerService>();
             services.AddTransient<IResurrectRecordsStorageService, ResurrectRecordsStorageService>();
             services.AddTransient<IDOMProcessingService, DOMProcessingService>();
+            services.AddTransient<IKeyPointsExtractorService, KeyPointsExtractorService>();
             services.AddTransient<ISemanticService, SemanticService>();
         }
 

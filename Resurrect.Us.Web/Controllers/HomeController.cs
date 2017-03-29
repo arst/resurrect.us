@@ -14,19 +14,19 @@ namespace Resurrect.Us.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IWaybackService waybackService;
-        private readonly IDOMProcessingService domProcessingService;
+        private readonly IKeyPointsExtractorService keyPointsExtractorService;
         private readonly IResurrectRecordsStorageService resurrectRecordStorageService;
 
-        public HomeController(IWaybackService waybackService, IDOMProcessingService domProcessingService, IResurrectRecordsStorageService resurrectRecordStorageService)
+        public HomeController(IWaybackService waybackService, IKeyPointsExtractorService keyPointsExtractorService, IResurrectRecordsStorageService resurrectRecordStorageService)
         {
             this.waybackService = waybackService;
-            this.domProcessingService = domProcessingService;
+            this.keyPointsExtractorService = keyPointsExtractorService;
             this.resurrectRecordStorageService = resurrectRecordStorageService;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View("Index");
         }
 
         [HttpPost]
@@ -35,9 +35,7 @@ namespace Resurrect.Us.Web.Controllers
             if (ModelState.IsValid)
             {
                 var wayBackResult = await this.waybackService.GetWaybackAsync(urlRequest.Url);
-                HttpClient cl = new HttpClient();
-                var html = await cl.GetStringAsync(urlRequest.Url);
-                var keypoints = this.domProcessingService.ExtractHTMLKeypoints(html);
+                var keypoints = await this.keyPointsExtractorService.GetHtmlKeypointsFromUrl(urlRequest.Url);
                 var resurrectRecord = new ResurrectionRecord()
                 {
                     Id = String.Format("{0:X}", urlRequest.Url.GetHashCode()),
@@ -53,7 +51,7 @@ namespace Resurrect.Us.Web.Controllers
                 return View("Result",result.Id);
             }
             else {
-                return View(urlRequest);
+                return View("Index", urlRequest);
             }
         }
 
