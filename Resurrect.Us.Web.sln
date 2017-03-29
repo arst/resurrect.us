@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Data", "Resurr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Semantic", "Resurrect.Us.Semantic\Resurrect.Us.Semantic.csproj", "{BBA5C41B-3BCD-4219-88F8-EDC2F01D0775}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Tests", "..\Resurrect.Us.Tests\Resurrect.Us.Tests.csproj", "{189F6E69-89C7-459F-8D0C-4770A86BDADE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resurrect.Us.Tests", "Resurrect.Us.Tests\Resurrect.Us.Tests.csproj", "{189F6E69-89C7-459F-8D0C-4770A86BDADE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
