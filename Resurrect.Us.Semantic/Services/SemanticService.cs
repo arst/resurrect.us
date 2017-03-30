@@ -8,11 +8,11 @@ namespace Resurrect.Us.Semantic.Services
 {
     public class SemanticService : ISemanticService
     {
-        private readonly WordsFrequencyCounter wordsFrequencyCounter;
+        private readonly IWordsFrequencyCounter wordsFrequencyCounter;
 
-        public SemanticService()
+        public SemanticService(IWordsFrequencyCounter wordsFrequencyCounter)
         {
-            this.wordsFrequencyCounter = new WordsFrequencyCounter();
+            this.wordsFrequencyCounter = wordsFrequencyCounter;
         }
 
         public List<string> GetTopKeywords(string text, int? limit)

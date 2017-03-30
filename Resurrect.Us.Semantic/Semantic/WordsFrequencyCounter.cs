@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Resurrect.Us.Semantic.Semantic
 {
-    class WordsFrequencyCounter
+    public class WordsFrequencyCounter : IWordsFrequencyCounter
     {
-        private readonly TextTokenizer tokenizer;
+        private readonly ITextTokenizer tokenizer;
 
-        public WordsFrequencyCounter()
+        public WordsFrequencyCounter(ITextTokenizer tokenizer)
         {
-            this.tokenizer = new TextTokenizer();
+            this.tokenizer = tokenizer;
         }
 
         public Dictionary<string, int> GetWordsFrequencyCount(string text)

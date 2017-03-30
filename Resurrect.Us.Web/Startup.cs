@@ -12,6 +12,7 @@ using Resurrect.Us.Web.Service;
 using Resurrect.Us.Data.Models;
 using Resurrect.Us.Data.Services;
 using Resurrect.Us.Semantic.Services;
+using Resurrect.Us.Semantic.Semantic;
 
 namespace Resurrect.Us.Web
 {
@@ -41,6 +42,8 @@ namespace Resurrect.Us.Web
             services.AddTransient<IResurrectRecordsStorageService, ResurrectRecordsStorageService>();
             services.AddTransient<IDOMProcessingService, DOMProcessingService>();
             services.AddTransient<IKeyPointsExtractorService, KeyPointsExtractorService>();
+            services.AddTransient<ITextTokenizer, TextTokenizer>();
+            services.AddTransient<IWordsFrequencyCounter, WordsFrequencyCounter>();
             services.AddTransient<ISemanticService, SemanticService>();
         }
 
