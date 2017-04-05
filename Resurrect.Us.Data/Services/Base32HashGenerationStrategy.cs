@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Resurrect.Us.Data.Services
 {
-    public class BaseXHashGenerationStrategy : IHashStrategy
+    public class Base32HashGenerationStrategy : IHashStrategy
     {
         public string EncodeHash(long input)
         {
@@ -78,7 +78,7 @@ namespace Resurrect.Us.Data.Services
         private static Dictionary<char, int> _decodingSymbols = new Dictionary<char, int>(Base);
         private static Dictionary<int, char> _encodingSymbols = new Dictionary<int, char>(Base);
 
-        static BaseXHashGenerationStrategy()
+        static Base32HashGenerationStrategy()
         {
             FillDecodingAlphabet();
             FillEncodingAlphabet();
