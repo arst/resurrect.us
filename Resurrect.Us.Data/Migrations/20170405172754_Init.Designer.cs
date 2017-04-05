@@ -8,8 +8,8 @@ using Resurrect.Us.Data.Models;
 namespace Resurrect.Us.Data.Migrations
 {
     [DbContext(typeof(ResurrectRecordsContext))]
-    [Migration("20170328184530_Initial")]
-    partial class Initial
+    [Migration("20170405172754_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,7 +22,7 @@ namespace Resurrect.Us.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ResurrectionRecordId");
+                    b.Property<long?>("ResurrectionRecordId");
 
                     b.Property<string>("Value");
 
@@ -35,7 +35,7 @@ namespace Resurrect.Us.Data.Migrations
 
             modelBuilder.Entity("Resurrect.Us.Data.Models.ResurrectionRecord", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<decimal>("AccessCount");

@@ -21,7 +21,7 @@ namespace Resurrect.Us.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ResurrectionRecordId");
+                    b.Property<long?>("ResurrectionRecordId");
 
                     b.Property<string>("Value");
 
@@ -34,7 +34,7 @@ namespace Resurrect.Us.Data.Migrations
 
             modelBuilder.Entity("Resurrect.Us.Data.Models.ResurrectionRecord", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<decimal>("AccessCount");

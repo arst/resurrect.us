@@ -15,17 +15,20 @@ namespace Resurrect.Us.Web.Controllers
         private readonly IResurrectRecordsStorageService storageService;
         private readonly IWaybackService waybackService;
         private readonly IUrlCheckerService urlCheckerService;
+        private readonly IHashService hashService;
 
-        public RedirectController(IResurrectRecordsStorageService storageService, IWaybackService waybackService, IUrlCheckerService urlChecker)
+        public RedirectController(IResurrectRecordsStorageService storageService, IWaybackService waybackService, IUrlCheckerService urlChecker, IHashService hashService)
         {
             this.storageService = storageService;
             this.waybackService = waybackService;
             this.urlCheckerService = urlChecker;
+            this.hashService = hashService;
         }
 
         public async Task<IActionResult> Index(string tinyUrl)
         {
-            var record = this.storageService.GetResurrectionRecordAsync(tinyUrl);
+            var id = this.hashService.GetRecordId(tinyUrl);
+            var record = this.storageService.GetResurrectionRecordAsync(id);
 
             if (record == null)
             {

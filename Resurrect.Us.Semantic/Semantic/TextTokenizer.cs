@@ -25,7 +25,7 @@ namespace Resurrect.Us.Semantic.Semantic
             for (int i = 0; i < tokens.Length; i++)
             {
                 string token = tokens[i];
-                if (token.StartsWith("'") && token.EndsWith("'"))
+                if (token.StartsWith("'") && token.EndsWith("'") && token.Length > 2)
                     tokens[i] = token.Substring(1, token.Length - 2);
 
                 else if (token.StartsWith("'"))

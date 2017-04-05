@@ -12,7 +12,7 @@ namespace Resurrect.Us.Data.Models
         }
 
         [Key]
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string Timestamp { get; set; }
         [Required]
         public string Url { get; set; }

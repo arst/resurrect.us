@@ -8,6 +8,7 @@ using Resurrect.Us.Web.Service;
 using System.Net.Http;
 using Resurrect.Us.Data.Services;
 using Resurrect.Us.Data.Models;
+using System.IO;
 
 namespace Resurrect.Us.Web.Controllers
 {
@@ -16,12 +17,14 @@ namespace Resurrect.Us.Web.Controllers
         private readonly IWaybackService waybackService;
         private readonly IKeyPointsExtractorService keyPointsExtractorService;
         private readonly IResurrectRecordsStorageService resurrectRecordStorageService;
+        private readonly IHashService hashGenerator;
 
-        public HomeController(IWaybackService waybackService, IKeyPointsExtractorService keyPointsExtractorService, IResurrectRecordsStorageService resurrectRecordStorageService)
+        public HomeController(IWaybackService waybackService, IKeyPointsExtractorService keyPointsExtractorService, IResurrectRecordsStorageService resurrectRecordStorageService, IHashService hashGenerator)
         {
             this.waybackService = waybackService;
             this.keyPointsExtractorService = keyPointsExtractorService;
             this.resurrectRecordStorageService = resurrectRecordStorageService;
+            this.hashGenerator = hashGenerator;
         }
 
         public IActionResult Index()
@@ -38,7 +41,6 @@ namespace Resurrect.Us.Web.Controllers
                 var keypoints = await this.keyPointsExtractorService.GetHtmlKeypointsFromUrl(urlRequest.Url);
                 var resurrectRecord = new ResurrectionRecord()
                 {
-                    Id = String.Format("{0:X}", urlRequest.Url.GetHashCode()),
                     AccessCount = 0,
                     LastAccess = DateTime.Now,
                     Timestamp = wayBackResult != null ? wayBackResult.GetClosestTimestamp() : "",
@@ -48,7 +50,16 @@ namespace Resurrect.Us.Web.Controllers
                     
                 };
                 var result = await this.resurrectRecordStorageService.AddRecordAsync(resurrectRecord);
-                return View("Result",result.Id);
+                var request = HttpContext.Request;
+                var hash = this.hashGenerator.GetHash(result.Id);
+                var model = string.Concat(
+                        request.Scheme,
+                        "://",
+                        request.Host.ToUriComponent(), 
+                        "/",
+                        hash);
+
+                return View("Result",model);
             }
             else {
                 return View("Index", urlRequest);

@@ -45,6 +45,8 @@ namespace Resurrect.Us.Web
             services.AddTransient<ITextTokenizer, TextTokenizer>();
             services.AddTransient<IWordsFrequencyCounter, WordsFrequencyCounter>();
             services.AddTransient<ISemanticService, SemanticService>();
+            services.AddTransient<IHashStrategy, BaseXHashGenerationStrategy>();
+            services.AddTransient<IHashService, HashService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

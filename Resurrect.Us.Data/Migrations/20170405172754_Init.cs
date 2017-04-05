@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Resurrect.Us.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,8 @@ namespace Resurrect.Us.Data.Migrations
                 name: "ResurrectRecords",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AccessCount = table.Column<decimal>(nullable: false),
                     LastAccess = table.Column<DateTime>(nullable: false),
                     Timestamp = table.Column<string>(nullable: true),
@@ -31,7 +32,7 @@ namespace Resurrect.Us.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ResurrectionRecordId = table.Column<string>(nullable: true),
+                    ResurrectionRecordId = table.Column<long>(nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

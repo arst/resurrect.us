@@ -6,7 +6,7 @@ namespace Resurrect.Us.Data.Services
     public interface IResurrectRecordsStorageService
     {
         Task<ResurrectionRecord> AddRecordAsync(ResurrectionRecord record);
-        ResurrectionRecord GetResurrectionRecordAsync(string id);
+        ResurrectionRecord GetResurrectionRecordAsync(long id);
         ResurrectionRecord UpdateRecord(ResurrectionRecord record);
     }
 }

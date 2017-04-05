@@ -14,3 +14,20 @@
         <button type="button" class="btn btn-primary copy-to-clipboard">Copy to clipboard</button>
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <link href="~/css/overhang.min.css" rel="stylesheet" />
+    <script src="~/js/overhang.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("body").overhang({
+                    custom: true, // Set custom to true
+                primary: "#34495E", // Your custom primary color
+                accent: "#F4B350", // Your custom accent color
+                message: '@Model',
+                duration: 15
+                });
+            });
+    </script>
+}

@@ -35,15 +35,17 @@ namespace Resurrect.Us.Tests.Web
                 }
             };
             waybackMoq.Setup(w => w.GetWaybackAsync(It.IsAny<string>())).Returns(Task.FromResult(moqWaybackResult));
+            var hashMoq = new Mock<IHashService>();
+            hashMoq.Setup(h => h.GetRecordId(It.IsAny<string>())).Returns(() => 1);
             ResurrectionRecord moqRecord = new ResurrectionRecord()
             {
-                Id = "Test_id"
+                Id = 1 
             };
             var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<string>())).Returns(() => null);
-            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object);
+            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<int>())).Returns(() => null);
+            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object, hashMoq.Object);
             var result = sut.Index("test_id");
-            storageMoq.Verify(s => s.GetResurrectionRecordAsync(It.Is<string>(id => id == "test_id")), Times.Once);
+            storageMoq.Verify(s => s.GetResurrectionRecordAsync(It.Is<int>(id => id == 1)), Times.Once);
         }
 
 
@@ -68,11 +70,12 @@ namespace Resurrect.Us.Tests.Web
             waybackMoq.Setup(w => w.GetWaybackAsync(It.IsAny<string>())).Returns(Task.FromResult(moqWaybackResult));
             ResurrectionRecord moqRecord = new ResurrectionRecord()
             {
-                Id = "Test_id"
+                Id = 1
             };
             var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<string>())).Returns(() => null);
-            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object);
+            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<int>())).Returns(() => null);
+            var hashMoq = new Mock<IHashService>();
+            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object, hashMoq.Object);
             var result = (await sut.Index("test_id")) as RedirectToActionResult;
 
             Assert.Equal(result.ActionName, "Index");
@@ -101,12 +104,13 @@ namespace Resurrect.Us.Tests.Web
             waybackMoq.Setup(w => w.GetWaybackAsync(It.IsAny<string>())).Returns(Task.FromResult(moqWaybackResult));
             ResurrectionRecord moqRecord = new ResurrectionRecord()
             {
-                Id = "Test_id",
+                Id = 1,
                 Url = "test_url"
             };
             var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<string>())).Returns(() => moqRecord);
-            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object);
+            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<int>())).Returns(() => moqRecord);
+            var hashMoq = new Mock<IHashService>();
+            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object, hashMoq.Object);
             var result = (await sut.Index("test_id")) as RedirectToActionResult;
             urlCheckerMoq.Verify(u => u.CheckUrl(It.Is<string>(url => url == "test_url")));
         }
@@ -133,12 +137,13 @@ namespace Resurrect.Us.Tests.Web
             waybackMoq.Setup(w => w.GetWaybackAsync(It.IsAny<string>())).Returns(Task.FromResult(moqWaybackResult));
             ResurrectionRecord moqRecord = new ResurrectionRecord()
             {
-                Id = "Test_id",
+                Id = 1,
                 Url = "test_url"
             };
             var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<string>())).Returns(() => moqRecord);
-            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object);
+            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<int>())).Returns(() => moqRecord);
+            var hashMoq = new Mock<IHashService>();
+            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object, hashMoq.Object);
             var result = (await sut.Index("test_id")) as RedirectResult;
             Assert.Equal(result.Url, "test_url");
             Assert.Equal(result.Permanent, true);
@@ -166,12 +171,13 @@ namespace Resurrect.Us.Tests.Web
             waybackMoq.Setup(w => w.GetWaybackAsync(It.IsAny<string>())).Returns(Task.FromResult(moqWaybackResult));
             ResurrectionRecord moqRecord = new ResurrectionRecord()
             {
-                Id = "Test_id",
+                Id = 1,
                 Url = "test_url"
             };
             var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<string>())).Returns(() => moqRecord);
-            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object);
+            var hashMoq = new Mock<IHashService>();
+            storageMoq.Setup(s => s.GetResurrectionRecordAsync(It.IsAny<int>())).Returns(() => moqRecord);
+            var sut = new RedirectController(storageMoq.Object, waybackMoq.Object, urlCheckerMoq.Object, hashMoq.Object);
             var result = (await sut.Index("test_id")) as RedirectResult;
             Assert.Equal(result.Url, "wayback_test_url");
             Assert.Equal(result.Permanent, false);

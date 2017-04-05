@@ -16,14 +16,16 @@ namespace Resurrect.Us.Data.Services
             this.context = context;
         }
 
-        public ResurrectionRecord GetResurrectionRecordAsync(string id)
+        public ResurrectionRecord GetResurrectionRecordAsync(long id)
         {
             return this.context.ResurrectRecords.FirstOrDefault(r => r.Id == id);
         }
 
         public async Task<ResurrectionRecord> AddRecordAsync(ResurrectionRecord record)
         {
-            return (await this.context.ResurrectRecords.AddAsync(record)).Entity;
+            var result = (await this.context.ResurrectRecords.AddAsync(record)).Entity;
+            await this.context.SaveChangesAsync();
+            return result;
         }
 
         public ResurrectionRecord UpdateRecord(ResurrectionRecord record)
