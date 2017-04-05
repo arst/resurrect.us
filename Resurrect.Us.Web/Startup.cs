@@ -45,7 +45,7 @@ namespace Resurrect.Us.Web
             services.AddTransient<ITextTokenizer, TextTokenizer>();
             services.AddTransient<IWordsFrequencyCounter, WordsFrequencyCounter>();
             services.AddTransient<ISemanticService, SemanticService>();
-            services.AddTransient<IHashStrategy, BaseXHashGenerationStrategy>();
+            services.AddTransient<IHashStrategy, Base32HashGenerationStrategy>();
             services.AddTransient<IHashService, HashService>();
         }
 
