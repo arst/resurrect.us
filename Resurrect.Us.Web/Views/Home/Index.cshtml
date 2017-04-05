@@ -1,49 +1,61 @@
 ﻿@model HomePageViewModel
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Getting started";
 }
 
 
 <div class="row main-content">
-    <div class="col-md-6 col-md-push-3 col-md-pull-3">
+    <div class="col-md-8 col-md-push-2 col-md-pull-2">
         <form asp-controller="Home" asp-action="Index" method="post">
             <div class="input-group">
                 <input asp-for="Url" type="text" class="form-control" placeholder="Enter your url here">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Resurrect me!</button>
+                    <button class="btn btn-success" type="submit">Immortalize me!</button>
                 </span>
             </div>
             <span asp-validation-for="Url" class="text-danger"></span>
         </form>
     </div>
 </div>
+<div class="row usage" style="text-align:center;">
+    <div>
+        <div class="panel panel-info">
+            <div class="panel-heading">Basic usage</div>
+            <div class="panel-body">
+                <p>1. Place your url into immortalize field</p>
+                <p>2. Click Immortalize me! </p>
+                <p>3. Copy or remember the result</p>
+                <p>4. Save it and forget about 404 urls!</p>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row about">
-    <div class="col-md-2 col-md-offset-3">
+    <div class="col-md-4">
         <ul class="list-group">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
+            <li class="list-group-item active">Why do I need to use this service?</li>
+            <li class="list-group-item">It generates human readable urls</li>
+            <li class="list-group-item">It uses web archive backup to resurrect your URL's </li>
+            <li class="list-group-item">It will google for you if it can't find something more usefull</li>
+            <li class="list-group-item">It will save your time!</li>
         </ul>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-4">
         <ul class="list-group">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
+            <li class="list-group-item active">Use cases</li>
+            <li class="list-group-item">No need to copy the URL, it is so human readable that you can just pass it over the phone conversation</li>
+            <li class="list-group-item">Tired of situation when you save some article to read it later and when you have time for it the article already gone?</li>
+            <li class="list-group-item">Whatever you can imagine...</li>
+
         </ul>
-    </div>
-    <div class="col-md-2">
+    </div>  
+    <div class="col-md-4">
         <ul class="list-group">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
+            <li class="list-group-item active">Special thanks</li>
+            <li class="list-group-item"><a href="https://archive.org/web/" rel="nofollow">Wayback machine Internet Archive</a></li>
+            <li class="list-group-item"><a href="https://google.com" rel="nofollow">Google</a></li>
+            <li class="list-group-item"><a href="/home/about">Me :)</a></li>
         </ul>
     </div>
 </div>

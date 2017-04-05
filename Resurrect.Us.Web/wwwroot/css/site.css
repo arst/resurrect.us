@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    font-family: 'Oswald', sans-serif;
 }
 
 /* Wrapping element */
@@ -24,6 +25,7 @@
 
 .main-content {
     margin-top: 100px;
+    margin-bottom: 100px;
 }
 
 .about {
@@ -39,10 +41,27 @@
 .text-center {
     text-align: center
 }
+
+.navbar-brand {
+    font-family: 'Baloo Chettan', cursive;
+    font-size: 30px;
+}
+.url-result {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.url-result, .success-message {
+    font-size: 30px;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
     .carousel-caption {
         display: none;
+    }
+    .main-content {
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 }
