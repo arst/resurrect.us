@@ -14,17 +14,11 @@ namespace Resurrect.Us.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IWaybackService waybackService;
-        private readonly IKeyPointsExtractorService keyPointsExtractorService;
-        private readonly IResurrectRecordsStorageService resurrectRecordStorageService;
-        private readonly IHashService hashGenerator;
+        private readonly IUrlShortenerService urlShortenerService;
 
-        public HomeController(IWaybackService waybackService, IKeyPointsExtractorService keyPointsExtractorService, IResurrectRecordsStorageService resurrectRecordStorageService, IHashService hashGenerator)
+        public HomeController(IUrlShortenerService urlShortenerService)
         {
-            this.waybackService = waybackService;
-            this.keyPointsExtractorService = keyPointsExtractorService;
-            this.resurrectRecordStorageService = resurrectRecordStorageService;
-            this.hashGenerator = hashGenerator;
+            this.urlShortenerService = urlShortenerService;
         }
 
         public IActionResult Index()
@@ -37,28 +31,9 @@ namespace Resurrect.Us.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var wayBackResult = await this.waybackService.GetWaybackAsync(urlRequest.Url);
-                var keypoints = await this.keyPointsExtractorService.GetHtmlKeypointsFromUrl(urlRequest.Url);
-                var resurrectRecord = new ResurrectionRecord()
-                {
-                    AccessCount = 0,
-                    LastAccess = DateTime.Now,
-                    Timestamp = wayBackResult != null ? wayBackResult.GetClosestTimestamp() : "",
-                    Title = keypoints.Title,
-                    Url = urlRequest.Url,
-                    Keywords = keypoints.Keywords.Select(k => new Keyword() { Value = k}).ToList()
-                    
-                };
-                var result = await this.resurrectRecordStorageService.AddRecordAsync(resurrectRecord);
+                var shortUrl = await this.urlShortenerService.GetShortUrlAsync(urlRequest.Url);
                 var request = HttpContext.Request;
-                var hash = this.hashGenerator.GetHash(result.Id);
-                var model = string.Concat(
-                        request.Scheme,
-                        "://",
-                        request.Host.ToUriComponent(), 
-                        "/",
-                        hash);
-
+                var model = String.Format("{0}://{1}/{2}",request.Scheme, request.Host.ToUriComponent(), shortUrl);
                 return View("Result",model);
             }
             else {

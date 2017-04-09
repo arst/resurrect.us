@@ -16,15 +16,16 @@ namespace Resurrect.Us.Tests.Web
 {
     public class HomeControllerTests
     {
+        private Mock<IUrlShortenerService> GetShortenerMock()
+        {
+            var result = new Mock<IUrlShortenerService>();
+            return result;
+        }
+
         [Fact]
         public void IndexShouldReturnIndexView()
         {
-            var waybackMoq = new Mock<IWaybackService>();
-            var keyPointsExtractorMoq = new Mock<IKeyPointsExtractorService>();
-            var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            var hashStrategyMock = new Mock<IHashStrategy>();
-            var hashMoq = new Mock<HashService>(hashStrategyMock.Object);
-            var sut = new HomeController(waybackMoq.Object,keyPointsExtractorMoq.Object, storageMoq.Object, hashMoq.Object);
+            var sut = new HomeController(this.GetShortenerMock().Object);
             var viewResult = sut.Index();
             Assert.NotNull(viewResult as ViewResult);
             Assert.Equal((viewResult as ViewResult).ViewName, "Index");
@@ -33,11 +34,7 @@ namespace Resurrect.Us.Tests.Web
         [Fact]
         public async Task PostToIndexWithInvalidModelShouldReturnIndexView()
         {
-            var waybackMoq = new Mock<IWaybackService>();
-            var keyPointsExtractorMoq = new Mock<IKeyPointsExtractorService>();
-            var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            var hashMoq = new Mock<IHashService>();
-            var sut = new HomeController(waybackMoq.Object, keyPointsExtractorMoq.Object, storageMoq.Object, hashMoq.Object);
+            var sut = new HomeController(this.GetShortenerMock().Object);
             sut.ModelState.AddModelError("Url", "Test error");
             HomePageViewModel viewModel = new HomePageViewModel();
             viewModel.Url = "http://test.test";
@@ -52,24 +49,7 @@ namespace Resurrect.Us.Tests.Web
         [Fact]
         public async Task PostToIndexWithValdModelShouldReturnCorrectView()
         {
-            var waybackMoq = new Mock<IWaybackService>();
-            var keyPointsExtractorMoq = new Mock<IKeyPointsExtractorService>();
-            HTMLKeypointsResult moqKeypoints = new HTMLKeypointsResult()
-            {
-                Title = "Test",
-                Keywords = new List<string>() { "Test1", "Test2", "Test3" }
-            };
-            ResurrectionRecord moqRecord = new ResurrectionRecord()
-            {
-                Id = 1
-            };
-
-            keyPointsExtractorMoq.Setup(kp => kp.GetHtmlKeypointsFromUrl(It.IsAny<string>())).Returns(Task.FromResult<HTMLKeypointsResult>(moqKeypoints));
-            var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            var hashStrategyMock = new Mock<IHashStrategy>();
-            var hashMoq = new Mock<HashService>(hashStrategyMock.Object);
-            storageMoq.Setup(s => s.AddRecordAsync(It.IsAny<ResurrectionRecord>())).Returns(Task.FromResult(moqRecord));
-            var sut = new HomeController(waybackMoq.Object, keyPointsExtractorMoq.Object, storageMoq.Object, hashMoq.Object);
+            var sut = new HomeController(this.GetShortenerMock().Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext();
             sut.ControllerContext.HttpContext.Request.Scheme = "http";
             sut.ControllerContext.HttpContext.Request.Host = new HostString("test.com");
@@ -84,76 +64,17 @@ namespace Resurrect.Us.Tests.Web
         }
 
         [Fact]
-        public async Task PostToIndexWithValdModelShouldCreateNewRecord()
+        public async Task PostToIndexWithValdModelShouldCallForShortUrl()
         {
-            var waybackMoq = new Mock<IWaybackService>();
-            var keyPointsExtractorMoq = new Mock<IKeyPointsExtractorService>();
-            HTMLKeypointsResult moqKeypoints = new HTMLKeypointsResult()
-            {
-                Title = "Test",
-                Keywords = new List<string>() { "Test1", "Test2", "Test3" }
-            };
-            ResurrectionRecord moqRecord = new ResurrectionRecord()
-            {
-                Id = 1
-            };
-
-            keyPointsExtractorMoq.Setup(kp => kp.GetHtmlKeypointsFromUrl(It.IsAny<string>())).Returns(Task.FromResult<HTMLKeypointsResult>(moqKeypoints));
-            var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            storageMoq.Setup(s => s.AddRecordAsync(It.IsAny<ResurrectionRecord>())).Returns(Task.FromResult(moqRecord));
-            var hashStrategyMock = new Mock<IHashStrategy>();
-            var hashMoq = new Mock<HashService>(hashStrategyMock.Object);
-            var sut = new HomeController(waybackMoq.Object, keyPointsExtractorMoq.Object, storageMoq.Object, hashMoq.Object);
+            var shortenerMock = this.GetShortenerMock();
+            var sut = new HomeController(shortenerMock.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext();
             sut.ControllerContext.HttpContext.Request.Scheme = "http";
             sut.ControllerContext.HttpContext.Request.Host = new HostString("test.com");
             HomePageViewModel viewModel = new HomePageViewModel();
             viewModel.Url = "http://test.test";
             var result = await sut.Index(viewModel);
-            storageMoq.Verify(s => s.AddRecordAsync(It.IsAny<ResurrectionRecord>()), Times.Once);
-        }
-
-        [Fact]
-        public async Task PostToIndexWithValdModelShouldCreateNewRecordWithLatestWaybackTimestamp()
-        {
-            var waybackMoq = new Mock<IWaybackService>();
-            var moqWaybackResult = new WaybackResponse()
-            {
-                Closest = new ArchivedSnapshots()
-                {
-                    Closest = new ArchivedSnapshot()
-                    {
-                        Available = true,
-                        Status = 200,
-                        Timestamp = "test_timestamp",
-                        Url = "test_url"
-                    }
-                }
-            };
-            waybackMoq.Setup(w => w.GetWaybackAsync(It.IsAny<string>())).Returns(Task.FromResult(moqWaybackResult));
-            var keyPointsExtractorMoq = new Mock<IKeyPointsExtractorService>();
-            HTMLKeypointsResult moqKeypoints = new HTMLKeypointsResult()
-            {
-                Title = "Test",
-                Keywords = new List<string>() { "Test1", "Test2", "Test3" }
-            };
-            ResurrectionRecord moqRecord = new ResurrectionRecord()
-            {
-                Id = 1
-            };
-
-            keyPointsExtractorMoq.Setup(kp => kp.GetHtmlKeypointsFromUrl(It.IsAny<string>())).Returns(Task.FromResult<HTMLKeypointsResult>(moqKeypoints));
-            var storageMoq = new Mock<IResurrectRecordsStorageService>();
-            storageMoq.Setup(s => s.AddRecordAsync(It.IsAny<ResurrectionRecord>())).Returns(Task.FromResult(moqRecord));
-            var hashMoq = new Mock<IHashService>();
-            var sut = new HomeController(waybackMoq.Object, keyPointsExtractorMoq.Object, storageMoq.Object, hashMoq.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext();
-            sut.ControllerContext.HttpContext.Request.Scheme = "http";
-            sut.ControllerContext.HttpContext.Request.Host = new HostString("test.com");
-            HomePageViewModel viewModel = new HomePageViewModel();
-            viewModel.Url = "http://test.test";
-            var result = await sut.Index(viewModel);
-            storageMoq.Verify(s => s.AddRecordAsync(It.Is<ResurrectionRecord>(r => r.Timestamp == "test_timestamp")), Times.Once);
+            shortenerMock.Verify(s => s.GetShortUrlAsync(It.Is<string>(url => url == viewModel.Url)), Times.Once());
         }
     }
 }

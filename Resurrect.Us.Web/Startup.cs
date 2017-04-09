@@ -47,6 +47,7 @@ namespace Resurrect.Us.Web
             services.AddTransient<ISemanticService, SemanticService>();
             services.AddTransient<IHashStrategy, Base32HashGenerationStrategy>();
             services.AddTransient<IHashService, HashService>();
+            services.AddTransient<IUrlShortenerService, UrlShortenerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

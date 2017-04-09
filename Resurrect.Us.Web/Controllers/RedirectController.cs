@@ -12,32 +12,31 @@ namespace Resurrect.Us.Web.Controllers
     public class RedirectController
     {
 
-        private readonly IResurrectRecordsStorageService storageService;
         private readonly IWaybackService waybackService;
         private readonly IUrlCheckerService urlCheckerService;
-        private readonly IHashService hashService;
+        private readonly IUrlShortenerService urlShortenerService;
 
-        public RedirectController(IResurrectRecordsStorageService storageService, IWaybackService waybackService, IUrlCheckerService urlChecker, IHashService hashService)
+        public RedirectController(IWaybackService waybackService, 
+                                  IUrlCheckerService urlChecker, 
+                                  IUrlShortenerService urlShortenerService)
         {
-            this.storageService = storageService;
             this.waybackService = waybackService;
             this.urlCheckerService = urlChecker;
-            this.hashService = hashService;
+            this.urlShortenerService = urlShortenerService;
         }
 
         public async Task<IActionResult> Index(string tinyUrl)
         {
-            var id = this.hashService.GetRecordId(tinyUrl);
-            var record = this.storageService.GetResurrectionRecordAsync(id);
+            var deshortenedUrl = await this.urlShortenerService.GetDeshortenedUrl(tinyUrl);
 
-            if (record == null)
+            if (String.IsNullOrEmpty(deshortenedUrl))
             {
                 return new RedirectToActionResult("Index", "Home", new object());
             }
 
-            if (await this.urlCheckerService.CheckUrl(record.Url) != System.Net.HttpStatusCode.OK)
+            if (await this.urlCheckerService.CheckUrl(deshortenedUrl) != System.Net.HttpStatusCode.OK)
             {
-                var wayback = await this.waybackService.GetWaybackAsync(record.Url);
+                var wayback = await this.waybackService.GetWaybackAsync(deshortenedUrl);
 
                 if (wayback != null)
                 {
@@ -45,7 +44,7 @@ namespace Resurrect.Us.Web.Controllers
                 }
             }
 
-            return new RedirectResult(record.Url, true);
+            return new RedirectResult(deshortenedUrl, true);
         }
     }
 }

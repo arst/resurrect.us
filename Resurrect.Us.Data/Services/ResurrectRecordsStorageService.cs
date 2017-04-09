@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using Resurrect.Us.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Resurrect.Us.Data.Services
 {
@@ -16,9 +17,14 @@ namespace Resurrect.Us.Data.Services
             this.context = context;
         }
 
-        public ResurrectionRecord GetResurrectionRecordAsync(long id)
+        public async Task<ResurrectionRecord> GetResurrectionRecordByUrlAsync(string url)
         {
-            return this.context.ResurrectRecords.FirstOrDefault(r => r.Id == id);
+            return await this.context.ResurrectRecords.FirstOrDefaultAsync(r => r.Url == url);
+        }
+
+        public async Task<ResurrectionRecord> GetResurrectionRecordAsync(long id)
+        {
+            return await this.context.ResurrectRecords.FirstOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task<ResurrectionRecord> AddRecordAsync(ResurrectionRecord record)
@@ -52,7 +58,11 @@ namespace Resurrect.Us.Data.Services
 
             if (ctx != null)
             {
-                ctx.SaveChanges();
+                using (ctx)
+                {
+                    ctx.SaveChanges();
+                }
+                
             }
         }
     }
