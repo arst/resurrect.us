@@ -32,7 +32,7 @@ namespace Resurrect.Us.Tests.Web
         }
 
         [Fact]
-        public void IndexShouldTryToGetRecordWithProvidedId()
+        public void IndexShallGetShortUrlByPassedId()
         {
             var sutContructoCtx = new RedirectConstructorContext();
             var moqWaybackResult = new WaybackResponse()
