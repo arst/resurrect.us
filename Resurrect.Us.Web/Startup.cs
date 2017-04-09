@@ -13,6 +13,7 @@ using Resurrect.Us.Data.Models;
 using Resurrect.Us.Data.Services;
 using Resurrect.Us.Semantic.Services;
 using Resurrect.Us.Semantic.Semantic;
+using Resurrect.Us.Web.Service.Wrappers;
 
 namespace Resurrect.Us.Web
 {
@@ -48,6 +49,7 @@ namespace Resurrect.Us.Web
             services.AddTransient<IHashStrategy, Base32HashGenerationStrategy>();
             services.AddTransient<IHashService, HashService>();
             services.AddTransient<IUrlShortenerService, UrlShortenerService>();
+            services.AddTransient<IHttpClientWrapper, HttpClientWrapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

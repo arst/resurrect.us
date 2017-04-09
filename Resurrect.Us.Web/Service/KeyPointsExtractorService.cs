@@ -1,4 +1,5 @@
 ﻿using Resurrect.Us.Web.Models;
+using Resurrect.Us.Web.Service.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,20 +12,20 @@ namespace Resurrect.Us.Web.Service
     {
         private readonly IDOMProcessingService domProcessingService;
         private readonly IUrlCheckerService urlChecker;
+        private readonly IHttpClientWrapper httpClientWrapper;
 
-        public KeyPointsExtractorService(IDOMProcessingService domProcessingService, IUrlCheckerService urlChecker)
+        public KeyPointsExtractorService(IDOMProcessingService domProcessingService, IUrlCheckerService urlChecker, IHttpClientWrapper httpClientWrapper)
         {
             this.domProcessingService = domProcessingService;
             this.urlChecker = urlChecker;
+            this.httpClientWrapper = httpClientWrapper;
         }
 
         public async Task<HTMLKeypointsResult> GetHtmlKeypointsFromUrl(string url)
         {
-            HttpClient cl = new HttpClient();
-
             if (await urlChecker.CheckUrl(url) == System.Net.HttpStatusCode.OK)
             {
-                var html = await cl.GetStringAsync(url);
+                var html = await this.httpClientWrapper.GetStringAsync(url);
                 var keypoints = this.domProcessingService.ExtractHTMLKeypoints(html);
 
                 return keypoints;
