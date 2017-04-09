@@ -23,6 +23,11 @@ namespace Resurrect.Us.Web.Service
 
         public async Task<HTMLKeypointsResult> GetHtmlKeypointsFromUrl(string url)
         {
+            if (String.IsNullOrEmpty(url) || !Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                throw new ArgumentException("Url must be an absolute url");
+            }
+
             if (await urlChecker.CheckUrl(url) == System.Net.HttpStatusCode.OK)
             {
                 var html = await this.httpClientWrapper.GetStringAsync(url);

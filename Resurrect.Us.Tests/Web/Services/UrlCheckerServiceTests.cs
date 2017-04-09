@@ -29,18 +29,18 @@ namespace Resurrect.Us.Tests.Web.Services
         }
 
         [Fact]
-        public void CheckUrlShallThrowExceptionWhenUrlIsNotAbsolute()
+        public async Task CheckUrlShallThrowExceptionWhenUrlIsNotAbsolute()
         {
             var httpClientWrapperMock = new Mock<IHttpClientWrapper>();
             var sut = new UrlCheckerService(httpClientWrapperMock.Object);
-            var ex = Assert.ThrowsAsync<ArgumentException>(async () => await sut.CheckUrl("/some.url"));
+            await Assert.ThrowsAsync<ArgumentException>(async () => await sut.CheckUrl("/some.url"));
         }
         [Fact]
-        public void CheckUrlShallThrowExceptionWhenUrlIsEmpty()
+        public async Task CheckUrlShallThrowExceptionWhenUrlIsEmpty()
         {
             var httpClientWrapperMock = new Mock<IHttpClientWrapper>();
             var sut = new UrlCheckerService(httpClientWrapperMock.Object);
-            var ex = Assert.ThrowsAsync<ArgumentException>(async () => await sut.CheckUrl(""));
+            await Assert.ThrowsAsync<ArgumentException>(async () => await sut.CheckUrl(""));
         }
 
     }
