@@ -20,7 +20,7 @@ namespace Resurrect.Us.Web.Service
         }
         public async Task<WaybackResponse> GetWaybackAsync(string url)
         {
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            if (String.IsNullOrEmpty(url) || !Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
                 throw new ArgumentException("Url must be an absolute url");
             }
@@ -28,10 +28,15 @@ namespace Resurrect.Us.Web.Service
             var client = new HttpClient();
             var jsonResponse = await this.httpClientWrapper
                 .GetStreamAsync(WaybackConstants.WaybackServerAddress + url);
-            var serializer = new DataContractJsonSerializer(typeof(WaybackResponse));
-            WaybackResponse response = serializer.ReadObject(jsonResponse) as WaybackResponse;
+            if (jsonResponse != null)
+            {
+                var serializer = new DataContractJsonSerializer(typeof(WaybackResponse));
+                WaybackResponse response = serializer.ReadObject(jsonResponse) as WaybackResponse;
 
-            return response;
+                return response;
+            }
+
+            return new WaybackResponse();
         }
     }
 }
