@@ -11,26 +11,32 @@ namespace Resurrect.Us.Web.Service.Wrappers
     {
         public Task<HttpResponseMessage> GetAsync(string requestUri)
         {
-            using (var client = new HttpClient())
-            {
-                return client.GetAsync(requestUri);
-            }
+            return Task.Run(async () => {
+                using (var client = new HttpClient())
+                {
+                    return await client.GetAsync(requestUri);
+                }
+            });
         }
 
         public Task<string> GetStringAsync(string requestUri)
         {
-            using (var client = new HttpClient())
-            {
-                return client.GetStringAsync(requestUri);
-            }
+            return Task.Run(async () => {
+                using (var client = new HttpClient())
+                {
+                    return await client.GetStringAsync(requestUri);
+                }
+            });
         }
 
         public Task<Stream> GetStreamAsync(string requestUri)
         {
-            using (var client = new HttpClient())
-            {
-                return client.GetStreamAsync(requestUri);
-            }
+            return Task.Run(async () => {
+                using (var client = new HttpClient())
+                {
+                    return await client.GetStreamAsync(requestUri);
+                }
+            });
         }
     }
 }

@@ -44,13 +44,16 @@ namespace Resurrect.Us.Tests.Web.Services
                     }
                 }
             };
-            var serializer = new DataContractJsonSerializer(typeof(WaybackResponse));
             MemoryStream stream = new MemoryStream();
-            serializer.WriteObject(stream, dummyResponse);
+            var dummyString = "{ \"archived_snapshots\": { \"closest\": { \"available\": true, \"url\": \"http://web.archive.org/web/20130919044612/http://example.com/\", \"timestamp\": \"20130919044612\", \"status\": \"200\"} }}";
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(dummyString);
+            writer.Flush();
+            stream.Position = 0;
             httpClientWrapperMock.Setup(h => h.GetStreamAsync(It.IsAny<string>())).Returns(Task.FromResult(stream as Stream));
             var sut = new WaybackService(httpClientWrapperMock.Object);
             var result = await sut.GetWaybackAsync("http://some.url");
-            Assert.Equal("test_url", result.GetClosestUrl());
+            Assert.Equal("http://web.archive.org/web/20130919044612/http://example.com/", result.GetClosestUrl());
         }
 
         [Fact]
