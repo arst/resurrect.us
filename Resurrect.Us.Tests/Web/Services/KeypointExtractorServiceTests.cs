@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Resurrect.Us.Tests.Web.Services
 {
-    class KeypointExtractorServiceTests
+    public class KeypointExtractorServiceTests
     {
         [Fact]
         public async Task GetHtmlKeypointsFromUrlMustReturnEmptyKeypointResultWhenUrlIsNotAvailable()
