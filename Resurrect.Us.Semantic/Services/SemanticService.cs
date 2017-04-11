@@ -18,7 +18,7 @@ namespace Resurrect.Us.Semantic.Services
         public List<string> GetTopKeywords(string text, int? limit)
         {
             var frequencies = this.wordsFrequencyCounter.GetWordsFrequencyCount(text).ToList();
-            frequencies.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+            frequencies.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value) * -1);
 
             return frequencies.Take(limit ?? Int32.MaxValue).Select(kv => kv.Key).ToList();        
         }
