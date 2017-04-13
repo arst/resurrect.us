@@ -40,7 +40,7 @@ namespace Resurrect.Us.Data.Services
                 }
                 symbol = new String(symbolArray);
             }
-            catch
+            catch(Exception ex)
             {
                 symbol = "(NAN)";
             }
