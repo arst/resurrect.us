@@ -25,6 +25,13 @@ namespace Resurrect.Us.Data.Models
             base.OnConfiguring(optionsBuilder);
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ResurrectionRecord>()
+                .HasIndex(r => r.Url)
+                .HasName("Index_Url");
+        }
+
         public DbSet<ResurrectionRecord> ResurrectRecords { get; set; }
     }
 }

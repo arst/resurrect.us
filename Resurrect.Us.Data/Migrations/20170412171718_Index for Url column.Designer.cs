@@ -8,9 +8,10 @@ using Resurrect.Us.Data.Models;
 namespace Resurrect.Us.Data.Migrations
 {
     [DbContext(typeof(ResurrectRecordsContext))]
-    partial class ResurrectRecordsContextModelSnapshot : ModelSnapshot
+    [Migration("20170412171718_Index for Url column")]
+    partial class IndexforUrlcolumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
