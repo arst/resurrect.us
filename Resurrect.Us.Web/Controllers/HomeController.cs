@@ -9,16 +9,19 @@ using System.Net.Http;
 using Resurrect.Us.Data.Services;
 using Resurrect.Us.Data.Models;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace Resurrect.Us.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IUrlShortenerService urlShortenerService;
+        private readonly ILogger<HomeController> logger;
 
-        public HomeController(IUrlShortenerService urlShortenerService)
+        public HomeController(IUrlShortenerService urlShortenerService, ILogger<HomeController> logger)
         {
             this.urlShortenerService = urlShortenerService;
+            this.logger = logger;
         }
 
         public IActionResult Index()
@@ -31,6 +34,7 @@ namespace Resurrect.Us.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                logger.LogInformation("Processing url - {0}", urlRequest.Url);
                 var shortUrl = await this.urlShortenerService.GetShortUrlAsync(urlRequest.Url);
                 var request = HttpContext.Request;
                 var model = String.Format("{0}://{1}/{2}",request.Scheme, request.Host.ToUriComponent(), shortUrl);

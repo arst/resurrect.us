@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,13 @@ namespace Resurrect.Us.Data.Services
 {
     public class Base32HashGenerationStrategy : IHashStrategy
     {
+        private readonly ILogger<Base32HashGenerationStrategy> logger;
+
+        public Base32HashGenerationStrategy(ILogger<Base32HashGenerationStrategy> logger)
+        {
+            this.logger = logger;
+        }
+
         public string EncodeHash(long input)
         {
             return this.Encode(input);
@@ -42,6 +50,7 @@ namespace Resurrect.Us.Data.Services
             }
             catch(Exception ex)
             {
+                logger.LogError(ex.Message);
                 symbol = "(NAN)";
             }
             return symbol;

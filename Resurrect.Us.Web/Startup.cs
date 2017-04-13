@@ -14,6 +14,8 @@ using Resurrect.Us.Data.Services;
 using Resurrect.Us.Semantic.Services;
 using Resurrect.Us.Semantic.Semantic;
 using Resurrect.Us.Web.Service.Wrappers;
+using Serilog;
+using System.IO;
 
 namespace Resurrect.Us.Web
 {
@@ -37,8 +39,8 @@ namespace Resurrect.Us.Web
             // Add framework services.
             services.AddMvc();
             services.AddTransient<IWaybackService, WaybackService>();
-            var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=resurrectus;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            services.AddDbContext<ResurrectRecordsContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<ResurrectRecordsContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("ResurrectRecordsDatabase")));
             services.AddTransient<IUrlCheckerService, UrlCheckerService>();
             services.AddTransient<IResurrectRecordsStorageService, ResurrectRecordsStorageService>();
             services.AddTransient<IDOMProcessingService, DOMProcessingService>();
@@ -57,6 +59,11 @@ namespace Resurrect.Us.Web
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.MSSqlServer(Configuration.GetConnectionString("ResurrectRecordsDatabase"), "logs")
+                .CreateLogger();
+            loggerFactory.AddSerilog();
 
             if (env.IsDevelopment())
             {

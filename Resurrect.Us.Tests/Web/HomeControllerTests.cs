@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Resurrect.Us.Data.Models;
 using Resurrect.Us.Data.Services;
@@ -22,10 +23,17 @@ namespace Resurrect.Us.Tests.Web
             return result;
         }
 
+        private Mock<ILogger<HomeController>> GetLoggerMock()
+        {
+            var result = new Mock<ILogger<HomeController>>();
+
+            return result;
+        }
+
         [Fact]
         public void IndexShouldReturnIndexView()
         {
-            var sut = new HomeController(this.GetShortenerMock().Object);
+            var sut = new HomeController(this.GetShortenerMock().Object, this.GetLoggerMock().Object);
             var viewResult = sut.Index();
             Assert.NotNull(viewResult as ViewResult);
             Assert.Equal((viewResult as ViewResult).ViewName, "Index");
@@ -34,7 +42,7 @@ namespace Resurrect.Us.Tests.Web
         [Fact]
         public async Task PostToIndexWithInvalidModelShouldReturnIndexView()
         {
-            var sut = new HomeController(this.GetShortenerMock().Object);
+            var sut = new HomeController(this.GetShortenerMock().Object, this.GetLoggerMock().Object);
             sut.ModelState.AddModelError("Url", "Test error");
             HomePageViewModel viewModel = new HomePageViewModel();
             viewModel.Url = "http://test.test";
@@ -49,7 +57,7 @@ namespace Resurrect.Us.Tests.Web
         [Fact]
         public async Task PostToIndexWithValdModelShouldReturnCorrectView()
         {
-            var sut = new HomeController(this.GetShortenerMock().Object);
+            var sut = new HomeController(this.GetShortenerMock().Object, this.GetLoggerMock().Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext();
             sut.ControllerContext.HttpContext.Request.Scheme = "http";
             sut.ControllerContext.HttpContext.Request.Host = new HostString("test.com");
@@ -67,7 +75,7 @@ namespace Resurrect.Us.Tests.Web
         public async Task PostToIndexWithValdModelShouldCallForShortUrl()
         {
             var shortenerMock = this.GetShortenerMock();
-            var sut = new HomeController(shortenerMock.Object);
+            var sut = new HomeController(shortenerMock.Object, this.GetLoggerMock().Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext();
             sut.ControllerContext.HttpContext.Request.Scheme = "http";
             sut.ControllerContext.HttpContext.Request.Host = new HostString("test.com");

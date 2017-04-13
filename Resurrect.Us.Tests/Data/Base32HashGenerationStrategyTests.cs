@@ -1,4 +1,6 @@
-﻿using Resurrect.Us.Data.Services;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using Resurrect.Us.Data.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +13,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyEncodeZero()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             var result = sut.Encode(0);
             Assert.Equal("(NAN)", result);
         }
@@ -19,7 +21,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyEncodeNegativeValue()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             var result = sut.Encode(-1);
             Assert.Equal("1", result);
         }
@@ -27,7 +29,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyEncodePositiveValue()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             var result = sut.Encode(1);
             Assert.Equal("1", result);
         }
@@ -35,7 +37,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyEncodeMaxValue()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             var result = sut.Encode(Int64.MaxValue);
             Assert.Equal(result, "7zzzzzzzzzzzz");
         }
@@ -43,7 +45,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyEncodeMinValue()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             var result = sut.Encode(Int64.MinValue);
             Assert.Equal("(NAN)", result);
         }
@@ -51,7 +53,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyEncodeNearMinValue()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             var result = sut.Encode(Int64.MinValue + 1);
             Assert.Equal("7zzzzzzzzzzzz", result);
         }
@@ -59,7 +61,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyEncodeOverflownValue()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             unchecked
             {
                 var result = sut.Encode(Int64.MaxValue + 1);
@@ -70,7 +72,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyDecodeZero()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             var result = sut.Decode("0");
             Assert.Equal(0, result);
         }
@@ -78,7 +80,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyDecodeNegativeValue()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             var result = sut.Decode("-1");
             Assert.Equal(-1, result);
         }
@@ -86,7 +88,7 @@ namespace Resurrect.Us.Tests.Data
         [Fact]
         public void ShouldCorrectlyDecodeMaxValue()
         {
-            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy();
+            Base32HashGenerationStrategy sut = new Base32HashGenerationStrategy(new Mock<ILogger<Base32HashGenerationStrategy>>().Object);
             var result = sut.Decode("7zzzzzzzzzzzz");
             Assert.Equal(Int64.MaxValue, result);
         }
