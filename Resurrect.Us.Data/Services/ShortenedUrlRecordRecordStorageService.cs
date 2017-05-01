@@ -8,35 +8,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Resurrect.Us.Data.Services
 {
-    public class ResurrectRecordsStorageService : IDisposable, IResurrectRecordsStorageService
+    public class ShortenedUrlRecordRecordStorageService : IDisposable, IShortenedUrlRecordRecordStorageService
     {
-        private readonly ResurrectRecordsContext context;
+        private readonly ShortenedUrlRecordRecordsContext context;
 
-        public ResurrectRecordsStorageService(ResurrectRecordsContext context)
+        public ShortenedUrlRecordRecordStorageService(ShortenedUrlRecordRecordsContext context)
         {
             this.context = context;
         }
 
-        public async Task<ResurrectionRecord> GetResurrectionRecordByUrlAsync(string url)
+        public async Task<ShortenedUrlRecordRecord> GetResurrectionRecordByUrlAsync(string url)
         {
-            return await this.context.ResurrectRecords.FirstOrDefaultAsync(r => r.Url == url);
+            return await this.context.ShortenedUrlRecordRecords.FirstOrDefaultAsync(r => r.Url == url);
         }
 
-        public async Task<ResurrectionRecord> GetResurrectionRecordAsync(long id)
+        public async Task<ShortenedUrlRecordRecord> GetResurrectionRecordAsync(long id)
         {
-            return await this.context.ResurrectRecords.FirstOrDefaultAsync(r => r.Id == id);
+            return await this.context.ShortenedUrlRecordRecords.FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task<ResurrectionRecord> AddRecordAsync(ResurrectionRecord record)
+        public async Task<ShortenedUrlRecordRecord> AddRecordAsync(ShortenedUrlRecordRecord record)
         {
-            var result = (await this.context.ResurrectRecords.AddAsync(record)).Entity;
+            var result = (await this.context.ShortenedUrlRecordRecords.AddAsync(record)).Entity;
             await this.context.SaveChangesAsync();
             return result;
         }
 
-        public ResurrectionRecord UpdateRecord(ResurrectionRecord record)
+        public ShortenedUrlRecordRecord UpdateRecord(ShortenedUrlRecordRecord record)
         {
-            var toUpdate = this.context.ResurrectRecords.FirstOrDefault(r => record.Id == r.Id);
+            var toUpdate = this.context.ShortenedUrlRecordRecords.FirstOrDefault(r => record.Id == r.Id);
 
             if (toUpdate == null)
             {
@@ -49,7 +49,7 @@ namespace Resurrect.Us.Data.Services
             toUpdate.Url = record.Url;
             toUpdate.Title = record.Title;
 
-            return this.context.ResurrectRecords.Update(toUpdate).Entity;
+            return this.context.ShortenedUrlRecordRecords.Update(toUpdate).Entity;
         }
 
         public void Dispose()

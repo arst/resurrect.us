@@ -39,10 +39,10 @@ namespace Resurrect.Us.Web
             // Add framework services.
             services.AddMvc();
             services.AddTransient<IWaybackService, WaybackService>();
-            services.AddDbContext<ResurrectRecordsContext>(options => 
+            services.AddDbContext<ShortenedUrlRecordRecordsContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("ResurrectRecordsDatabase")));
             services.AddTransient<IUrlCheckerService, UrlCheckerService>();
-            services.AddTransient<IResurrectRecordsStorageService, ResurrectRecordsStorageService>();
+            services.AddTransient<IShortenedUrlRecordRecordStorageService, ShortenedUrlRecordRecordStorageService>();
             services.AddTransient<IDOMProcessingService, DOMProcessingService>();
             services.AddTransient<IKeyPointsExtractorService, KeyPointsExtractorService>();
             services.AddTransient<ITextTokenizer, TextTokenizer>();

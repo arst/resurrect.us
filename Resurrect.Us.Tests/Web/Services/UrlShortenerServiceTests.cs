@@ -21,10 +21,10 @@ namespace Resurrect.Us.Tests.Web.Services
             keypointExtractorMock
                 .Setup(kp => kp.GetHtmlKeypointsFromUrl(It.IsAny<String>()))
                 .Returns(Task.FromResult(new HTMLKeypointsResult()));
-            var resurrectRecordsStorageMock = new Mock<IResurrectRecordsStorageService>();
+            var resurrectRecordsStorageMock = new Mock<IShortenedUrlRecordRecordStorageService>();
             resurrectRecordsStorageMock
                 .Setup(r => r.GetResurrectionRecordByUrlAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(new ResurrectionRecord() {
+                .Returns(Task.FromResult(new ShortenedUrlRecordRecord() {
                     Id = 1,
                     Url = "test.test"
                 }));
@@ -48,13 +48,13 @@ namespace Resurrect.Us.Tests.Web.Services
             keypointExtractorMock
                 .Setup(kp => kp.GetHtmlKeypointsFromUrl(It.IsAny<String>()))
                 .Returns(Task.FromResult(new HTMLKeypointsResult()));
-            var resurrectRecordsStorageMock = new Mock<IResurrectRecordsStorageService>();
+            var resurrectRecordsStorageMock = new Mock<IShortenedUrlRecordRecordStorageService>();
             resurrectRecordsStorageMock
                 .Setup(r => r.GetResurrectionRecordByUrlAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult<ResurrectionRecord>(null));
+                .Returns(Task.FromResult<ShortenedUrlRecordRecord>(null));
             resurrectRecordsStorageMock
-                .Setup(r => r.AddRecordAsync(It.IsAny<ResurrectionRecord>()))
-                .Returns(Task.FromResult(new ResurrectionRecord() {  Id = 2}));
+                .Setup(r => r.AddRecordAsync(It.IsAny<ShortenedUrlRecordRecord>()))
+                .Returns(Task.FromResult(new ShortenedUrlRecordRecord() {  Id = 2}));
             var hashServiceMock = new Mock<IHashService>();
             hashServiceMock
                 .Setup(h => h.GetHash(It.Is<long>(identifier => identifier == 2)))
@@ -72,10 +72,10 @@ namespace Resurrect.Us.Tests.Web.Services
         {
             var waybackMock = new Mock<IWaybackService>();
             var keypointExtractorMock = new Mock<IKeyPointsExtractorService>();
-            var resurrectRecordsStorageMock = new Mock<IResurrectRecordsStorageService>();
+            var resurrectRecordsStorageMock = new Mock<IShortenedUrlRecordRecordStorageService>();
             resurrectRecordsStorageMock
                 .Setup(r => r.GetResurrectionRecordAsync(It.IsAny<long>()))
-                .Returns(Task.FromResult<ResurrectionRecord>(null));
+                .Returns(Task.FromResult<ShortenedUrlRecordRecord>(null));
             var hashServiceMock = new Mock<IHashService>();
             hashServiceMock
                 .Setup(h => h.GetRecordId(It.IsAny<string>()))
@@ -91,10 +91,10 @@ namespace Resurrect.Us.Tests.Web.Services
         {
             var waybackMock = new Mock<IWaybackService>();
             var keypointExtractorMock = new Mock<IKeyPointsExtractorService>();
-            var resurrectRecordsStorageMock = new Mock<IResurrectRecordsStorageService>();
+            var resurrectRecordsStorageMock = new Mock<IShortenedUrlRecordRecordStorageService>();
             resurrectRecordsStorageMock
                 .Setup(r => r.GetResurrectionRecordAsync(It.IsAny<long>()))
-                .Returns(Task.FromResult<ResurrectionRecord>(new ResurrectionRecord() {
+                .Returns(Task.FromResult<ShortenedUrlRecordRecord>(new ShortenedUrlRecordRecord() {
                     Url = "test.test"
                 }));
             var hashServiceMock = new Mock<IHashService>();

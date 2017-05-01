@@ -187,7 +187,7 @@ namespace Resurrect.Us.Tests.Web
             sutContructoCtx.UrlShortenerMock
                .Setup(s => s.GetDeshortenedUrl(It.IsAny<string>()))
                .Returns(() => Task.FromResult("test_url"));
-            ResurrectionRecord moqRecord = new ResurrectionRecord()
+            ShortenedUrlRecordRecord moqRecord = new ShortenedUrlRecordRecord()
             {
                 Id = 1,
                 Url = "test_url"

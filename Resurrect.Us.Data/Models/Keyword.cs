@@ -7,6 +7,6 @@ namespace Resurrect.Us.Data.Models
         [Key]
         public int Id { get; set; }
         public string Value { get; set; }
-        public virtual ResurrectionRecord ResurrectionRecord { get; set; }
+        public virtual ShortenedUrlRecordRecord ShortenedUrlRecord { get; set; }
     }
 }

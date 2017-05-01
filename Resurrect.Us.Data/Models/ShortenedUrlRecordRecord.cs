@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Resurrect.Us.Data.Models
 {
-    public class ResurrectionRecord
+    public class ShortenedUrlRecordRecord
     {
-        public ResurrectionRecord()
+        public ShortenedUrlRecordRecord()
         {
             this.Keywords = new List<Keyword>();
         }

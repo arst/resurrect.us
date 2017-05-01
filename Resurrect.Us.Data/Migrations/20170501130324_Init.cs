@@ -10,7 +10,7 @@ namespace Resurrect.Us.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ResurrectRecords",
+                name: "ShortenedUrlRecordRecords",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -23,7 +23,7 @@ namespace Resurrect.Us.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ResurrectRecords", x => x.Id);
+                    table.PrimaryKey("PK_ShortenedUrlRecordRecords", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,24 +32,29 @@ namespace Resurrect.Us.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ResurrectionRecordId = table.Column<long>(nullable: true),
+                    ShortenedUrlRecordId = table.Column<long>(nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Keyword", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Keyword_ResurrectRecords_ResurrectionRecordId",
-                        column: x => x.ResurrectionRecordId,
-                        principalTable: "ResurrectRecords",
+                        name: "FK_Keyword_ShortenedUrlRecordRecords_ShortenedUrlRecordId",
+                        column: x => x.ShortenedUrlRecordId,
+                        principalTable: "ShortenedUrlRecordRecords",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Keyword_ResurrectionRecordId",
+                name: "IX_Keyword_ShortenedUrlRecordId",
                 table: "Keyword",
-                column: "ResurrectionRecordId");
+                column: "ShortenedUrlRecordId");
+
+            migrationBuilder.CreateIndex(
+                name: "Index_Url",
+                table: "ShortenedUrlRecordRecords",
+                column: "Url");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -58,7 +63,7 @@ namespace Resurrect.Us.Data.Migrations
                 name: "Keyword");
 
             migrationBuilder.DropTable(
-                name: "ResurrectRecords");
+                name: "ShortenedUrlRecordRecords");
         }
     }
 }

@@ -5,14 +5,9 @@ using System.Text;
 
 namespace Resurrect.Us.Data.Models
 {
-    public class ResurrectRecordsContext : DbContext
+    public class ShortenedUrlRecordRecordsContext : DbContext
     {
-        public ResurrectRecordsContext()
-        {
-
-        }
-
-        public ResurrectRecordsContext(DbContextOptions<ResurrectRecordsContext> options)
+        public ShortenedUrlRecordRecordsContext(DbContextOptions<ShortenedUrlRecordRecordsContext> options)
             :base(options)
         {
 
@@ -25,11 +20,11 @@ namespace Resurrect.Us.Data.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ResurrectionRecord>()
+            modelBuilder.Entity<ShortenedUrlRecordRecord>()
                 .HasIndex(r => r.Url)
                 .HasName("Index_Url");
         }
 
-        public DbSet<ResurrectionRecord> ResurrectRecords { get; set; }
+        public DbSet<ShortenedUrlRecordRecord> ShortenedUrlRecordRecords { get; set; }
     }
 }

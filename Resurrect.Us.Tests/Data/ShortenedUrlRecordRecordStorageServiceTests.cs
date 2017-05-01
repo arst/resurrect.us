@@ -9,14 +9,14 @@ using Xunit;
 
 namespace Resurrect.Us.Tests.Data
 {
-    public class ResurrectRecordsStorageServiceTests
+    public class ShortenedUrlRecordRecordStorageServiceTests
     {
-        private ResurrectRecordsContext GetContextMock()
+        private ShortenedUrlRecordRecordsContext GetContextMock()
         {
-            var opts = new DbContextOptionsBuilder<ResurrectRecordsContext>()
+            var opts = new DbContextOptionsBuilder<ShortenedUrlRecordRecordsContext>()
                  .UseInMemoryDatabase(Guid.NewGuid().ToString())
                  .Options;
-            var context = new ResurrectRecordsContext(opts);
+            var context = new ShortenedUrlRecordRecordsContext(opts);
 
             return context;
         }
@@ -25,17 +25,17 @@ namespace Resurrect.Us.Tests.Data
         public async Task ShouldCorrectlyFindRecordByUrl()
         {
             var ctx = this.GetContextMock();
-            ctx.ResurrectRecords.Add(new ResurrectionRecord() {
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord() {
                 Url = "test.url",
                 Id = 33
             });
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test1.url",
                 Id = 34
             });
             ctx.SaveChanges();
-            var sut = new ResurrectRecordsStorageService(ctx);
+            var sut = new ShortenedUrlRecordRecordStorageService(ctx);
 
             var result = await sut.GetResurrectionRecordByUrlAsync("test.url");
 
@@ -46,18 +46,18 @@ namespace Resurrect.Us.Tests.Data
         public async Task ShouldReturnNullWhenRecordDoesntExists()
         {
             var ctx = this.GetContextMock();
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test.url",
                 Id = 33
             });
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test1.url",
                 Id = 34
             });
             ctx.SaveChanges();
-            var sut = new ResurrectRecordsStorageService(ctx);
+            var sut = new ShortenedUrlRecordRecordStorageService(ctx);
 
             var result = await sut.GetResurrectionRecordByUrlAsync("test2.url");
 
@@ -68,18 +68,18 @@ namespace Resurrect.Us.Tests.Data
         public async Task ShouldNotFailWhenTwoRecordsWithTheSameUrlExists()
         {
             var ctx = this.GetContextMock();
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test.url",
                 Id = 33
             });
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test.url",
                 Id = 34
             });
             ctx.SaveChanges();
-            var sut = new ResurrectRecordsStorageService(ctx);
+            var sut = new ShortenedUrlRecordRecordStorageService(ctx);
 
             var result = await sut.GetResurrectionRecordByUrlAsync("test.url");
 
@@ -90,18 +90,18 @@ namespace Resurrect.Us.Tests.Data
         public async Task ShouldCorrectlyFindRecxordById()
         {
             var ctx = this.GetContextMock();
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test.url",
                 Id = 33
             });
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test1.url",
                 Id = 34
             });
             ctx.SaveChanges();
-            var sut = new ResurrectRecordsStorageService(ctx);
+            var sut = new ShortenedUrlRecordRecordStorageService(ctx);
 
             var result = await sut.GetResurrectionRecordAsync(34);
 
@@ -113,18 +113,18 @@ namespace Resurrect.Us.Tests.Data
         public async Task ShouldReturnNullWhenRecordWithIdNotFound()
         {
             var ctx = this.GetContextMock();
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test.url",
                 Id = 33
             });
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test1.url",
                 Id = 34
             });
             ctx.SaveChanges();
-            var sut = new ResurrectRecordsStorageService(ctx);
+            var sut = new ShortenedUrlRecordRecordStorageService(ctx);
 
             var result = await sut.GetResurrectionRecordAsync(1);
 
@@ -135,16 +135,16 @@ namespace Resurrect.Us.Tests.Data
         public async Task ShouldThrowArgeumntExceptionWhenRecordToUpdateIsNotFound()
         {
             var ctx = this.GetContextMock();
-            var sut = new ResurrectRecordsStorageService(ctx);
+            var sut = new ShortenedUrlRecordRecordStorageService(ctx);
 
-            Assert.Throws<ArgumentException>(() => sut.UpdateRecord(new ResurrectionRecord() { Id = 1 }));
+            Assert.Throws<ArgumentException>(() => sut.UpdateRecord(new ShortenedUrlRecordRecord() { Id = 1 }));
         }
 
         [Fact]
         public void ShouldCorrectlyUpdateRecord()
         {
             var ctx = this.GetContextMock();
-            ctx.ResurrectRecords.Add(new ResurrectionRecord()
+            ctx.ShortenedUrlRecordRecords.Add(new ShortenedUrlRecordRecord()
             {
                 Url = "test.url",
                 Id = 33,
@@ -154,8 +154,8 @@ namespace Resurrect.Us.Tests.Data
                 Title = "Some title"
             });
             ctx.SaveChanges();
-            var sut = new ResurrectRecordsStorageService(ctx);
-            var toUpdate = new ResurrectionRecord() {
+            var sut = new ShortenedUrlRecordRecordStorageService(ctx);
+            var toUpdate = new ShortenedUrlRecordRecord() {
                 Id = 33,
                 AccessCount = 2,
                 LastAccess = new DateTime(1990,12,12),

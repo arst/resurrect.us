@@ -11,14 +11,14 @@ namespace Resurrect.Us.Web.Service
     {
         private readonly IWaybackService waybackService;
         private readonly IKeyPointsExtractorService keypointExtractorService;
-        private readonly IResurrectRecordsStorageService resurrectRecordStorageService;
+        private readonly IShortenedUrlRecordRecordStorageService shortenedRecordStorageService;
         private readonly IHashService hashGenerator;
 
-        public UrlShortenerService(IWaybackService waybackService, IKeyPointsExtractorService keyPointExtractorService, IResurrectRecordsStorageService resurrectRecordStorageService, IHashService hashGenerator)
+        public UrlShortenerService(IWaybackService waybackService, IKeyPointsExtractorService keyPointExtractorService, IShortenedUrlRecordRecordStorageService shortenedRecordStorageService, IHashService hashGenerator)
         {
             this.waybackService = waybackService;
             this.keypointExtractorService = keyPointExtractorService;
-            this.resurrectRecordStorageService = resurrectRecordStorageService;
+            this.shortenedRecordStorageService = shortenedRecordStorageService;
             this.hashGenerator = hashGenerator;
         }
 
@@ -26,7 +26,7 @@ namespace Resurrect.Us.Web.Service
         {
             var wayBackResult = await this.waybackService.GetWaybackAsync(url);
             var keypoints = await this.keypointExtractorService.GetHtmlKeypointsFromUrl(url);
-            var resurrectRecord = new ResurrectionRecord()
+            var resurrectRecord = new ShortenedUrlRecordRecord()
             {
                 AccessCount = 0,
                 LastAccess = DateTime.Now,
@@ -36,7 +36,7 @@ namespace Resurrect.Us.Web.Service
                 Keywords = keypoints.Keywords.Select(k => new Keyword() { Value = k }).ToList()
 
             };
-            var existingRecord = await this.resurrectRecordStorageService.GetResurrectionRecordByUrlAsync(url);
+            var existingRecord = await this.shortenedRecordStorageService.GetResurrectionRecordByUrlAsync(url);
             var hash = String.Empty;
 
             if (existingRecord != null)
@@ -45,7 +45,7 @@ namespace Resurrect.Us.Web.Service
             }
             else
             {
-                var result = await this.resurrectRecordStorageService.AddRecordAsync(resurrectRecord);
+                var result = await this.shortenedRecordStorageService.AddRecordAsync(resurrectRecord);
                 hash = this.hashGenerator.GetHash(result.Id);
             }
 
@@ -56,7 +56,7 @@ namespace Resurrect.Us.Web.Service
         {
             var result = String.Empty;
             var id = this.hashGenerator.GetRecordId(shortUrl);
-            var record = await this.resurrectRecordStorageService.GetResurrectionRecordAsync(id);
+            var record = await this.shortenedRecordStorageService.GetResurrectionRecordAsync(id);
 
             if (record != null)
             {

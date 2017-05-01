@@ -7,8 +7,8 @@ using Resurrect.Us.Data.Models;
 
 namespace Resurrect.Us.Data.Migrations
 {
-    [DbContext(typeof(ResurrectRecordsContext))]
-    [Migration("20170405172754_Init")]
+    [DbContext(typeof(ShortenedUrlRecordRecordsContext))]
+    [Migration("20170501130324_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,18 +22,18 @@ namespace Resurrect.Us.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("ResurrectionRecordId");
+                    b.Property<long?>("ShortenedUrlRecordId");
 
                     b.Property<string>("Value");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ResurrectionRecordId");
+                    b.HasIndex("ShortenedUrlRecordId");
 
                     b.ToTable("Keyword");
                 });
 
-            modelBuilder.Entity("Resurrect.Us.Data.Models.ResurrectionRecord", b =>
+            modelBuilder.Entity("Resurrect.Us.Data.Models.ShortenedUrlRecordRecord", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -51,14 +51,17 @@ namespace Resurrect.Us.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ResurrectRecords");
+                    b.HasIndex("Url")
+                        .HasName("Index_Url");
+
+                    b.ToTable("ShortenedUrlRecordRecords");
                 });
 
             modelBuilder.Entity("Resurrect.Us.Data.Models.Keyword", b =>
                 {
-                    b.HasOne("Resurrect.Us.Data.Models.ResurrectionRecord", "ResurrectionRecord")
+                    b.HasOne("Resurrect.Us.Data.Models.ShortenedUrlRecordRecord", "ShortenedUrlRecord")
                         .WithMany("Keywords")
-                        .HasForeignKey("ResurrectionRecordId");
+                        .HasForeignKey("ShortenedUrlRecordId");
                 });
         }
     }
