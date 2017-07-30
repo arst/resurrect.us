@@ -1,17 +1,22 @@
-version: '2'
+version: '3'
 
 services:
   resurrect.us.web:
-    image: resurrect.us.web:dev
-    build:
-      args:
-        source: ${DOCKER_BUILD_SOURCE}
-    environment:
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-    volumes:
-      - ./Resurrect.Us.Web:/app
-      - ~/.nuget/packages:/root/.nuget/packages:ro
-      - ~/clrdbg:/clrdbg:ro
-    entrypoint: tail -f /dev/null
+    image: resurrect.us.web
     labels:
       - "com.microsoft.visualstudio.targetoperatingsystem=linux"
+    ports:
+       - 5001:80
+    build:
+      context: ./Resurrect.Us.Web
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - redis
+  redis:
+    image: "redis:alpine"
+  db:
+    image: "microsoft/mssql-server-linux"
+    environment:
+      SA_PASSWORD: "12Admin345"
+      CCEPT_EULA: "Y"

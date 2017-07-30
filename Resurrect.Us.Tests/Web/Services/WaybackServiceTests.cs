@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Moq;
 using Resurrect.Us.Web.Models;
 using Resurrect.Us.Web.Service;
 using Resurrect.Us.Web.Service.Wrappers;
@@ -18,7 +19,8 @@ namespace Resurrect.Us.Tests.Web.Services
         public async Task GetWaybackAsyncShouldThrowArgumentExceptionWhenUrlIsNotAbsoluteUrl()
         {
             var httpClientWrapperMock = new Mock<IHttpClientWrapper>();
-            var sut = new WaybackService(httpClientWrapperMock.Object);
+            var distributedCacheMock = new Mock<IDistributedCache>();
+            var sut = new WaybackService(httpClientWrapperMock.Object, distributedCacheMock.Object);
             await Assert.ThrowsAsync<ArgumentException>(async () => await sut.GetWaybackAsync("/someurl"));
         }
 
@@ -26,7 +28,8 @@ namespace Resurrect.Us.Tests.Web.Services
         public async Task GetWaybackAsyncShouldThrowArgumentExceptionWhenUrlIsNullAbsoluteUrl()
         {
             var httpClientWrapperMock = new Mock<IHttpClientWrapper>();
-            var sut = new WaybackService(httpClientWrapperMock.Object);
+            var distributedCacheMock = new Mock<IDistributedCache>();
+            var sut = new WaybackService(httpClientWrapperMock.Object, distributedCacheMock.Object);
             await Assert.ThrowsAsync<ArgumentException>(async () => await sut.GetWaybackAsync(null));
         }
 
@@ -34,6 +37,7 @@ namespace Resurrect.Us.Tests.Web.Services
         public async Task GetWaybackAsyncShouldReturnCorrectResultWhenUrlIsValid()
         {
             var httpClientWrapperMock = new Mock<IHttpClientWrapper>();
+            var distributedCacheMock = new Mock<IDistributedCache>();
             WaybackResponse dummyResponse = new WaybackResponse() {
                 Closest = new ArchivedSnapshots() {
                     Closest = new ArchivedSnapshot() {
@@ -51,7 +55,7 @@ namespace Resurrect.Us.Tests.Web.Services
             writer.Flush();
             stream.Position = 0;
             httpClientWrapperMock.Setup(h => h.GetStreamAsync(It.IsAny<string>())).Returns(Task.FromResult(stream as Stream));
-            var sut = new WaybackService(httpClientWrapperMock.Object);
+            var sut = new WaybackService(httpClientWrapperMock.Object, distributedCacheMock.Object);
             var result = await sut.GetWaybackAsync("http://some.url");
             Assert.Equal("http://web.archive.org/web/20130919044612/http://example.com/", result.GetClosestUrl());
         }
@@ -60,8 +64,9 @@ namespace Resurrect.Us.Tests.Web.Services
         public async Task GetWaybackAsyncShouldReturnEmptyResultWhenServiceResponseIsNull()
         {
             var httpClientWrapperMock = new Mock<IHttpClientWrapper>();
+            var distributedCacheMock = new Mock<IDistributedCache>();
             httpClientWrapperMock.Setup(h => h.GetStreamAsync(It.IsAny<string>())).Returns(Task.FromResult<Stream>(null));
-            var sut = new WaybackService(httpClientWrapperMock.Object);
+            var sut = new WaybackService(httpClientWrapperMock.Object, distributedCacheMock.Object);
             var result = await sut.GetWaybackAsync("http://some.url");
             Assert.Equal("", result.GetClosestUrl());
         }

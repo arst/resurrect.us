@@ -1,4 +1,5 @@
-﻿using Resurrect.Us.Data.Models;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Resurrect.Us.Data.Models;
 using Resurrect.Us.Data.Services;
 using System;
 using System.Collections.Generic;
@@ -13,16 +14,18 @@ namespace Resurrect.Us.Web.Service
         private readonly IKeyPointsExtractorService keypointExtractorService;
         private readonly IShortenedUrlRecordRecordStorageService shortenedRecordStorageService;
         private readonly IHashService hashGenerator;
+        private readonly IDistributedCache distributedCache;
 
-        public UrlShortenerService(IWaybackService waybackService, IKeyPointsExtractorService keyPointExtractorService, IShortenedUrlRecordRecordStorageService shortenedRecordStorageService, IHashService hashGenerator)
+        public UrlShortenerService(IWaybackService waybackService, IKeyPointsExtractorService keyPointExtractorService, IShortenedUrlRecordRecordStorageService shortenedRecordStorageService, IHashService hashGenerator, IDistributedCache distributedCache)
         {
             this.waybackService = waybackService;
             this.keypointExtractorService = keyPointExtractorService;
             this.shortenedRecordStorageService = shortenedRecordStorageService;
             this.hashGenerator = hashGenerator;
+            this.distributedCache = distributedCache;
         }
 
-        public async Task<string> GetShortUrlAsync(string url)
+        public async Task<string> GetShortUrlAsync(string url, bool googleForMe)
         {
             var wayBackResult = await this.waybackService.GetWaybackAsync(url);
             var keypoints = await this.keypointExtractorService.GetHtmlKeypointsFromUrl(url);
@@ -33,6 +36,7 @@ namespace Resurrect.Us.Web.Service
                 Timestamp = wayBackResult != null ? wayBackResult.GetClosestTimestamp() : "",
                 Title = keypoints.Title,
                 Url = url,
+                ShallBeGoogled = googleForMe,
                 Keywords = keypoints.Keywords.Select(k => new Keyword() { Value = k }).ToList()
 
             };
@@ -55,13 +59,25 @@ namespace Resurrect.Us.Web.Service
         public async Task<string> GetDeshortenedUrl(string shortUrl)
         {
             var result = String.Empty;
-            var id = this.hashGenerator.GetRecordId(shortUrl);
-            var record = await this.shortenedRecordStorageService.GetResurrectionRecordAsync(id);
-
-            if (record != null)
+            var cached = await this.distributedCache.GetStringAsync(String.Concat(shortUrl, "DeshortenedUrl"));
+            if (String.IsNullOrEmpty(cached))
             {
-                result = record.Url;
+                var id = this.hashGenerator.GetRecordId(shortUrl);
+
+
+                var record = await this.shortenedRecordStorageService.GetResurrectionRecordAsync(id);
+
+                if (record != null)
+                {
+                    await this.distributedCache.SetStringAsync(String.Concat(shortUrl, "DeshortenedUrl"), record.Url.ToString());
+                    result = record.Url;
+                }
             }
+            else
+            {
+                result = cached;
+            }
+            
 
             return result;
         }

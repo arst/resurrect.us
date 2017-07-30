@@ -16,6 +16,8 @@ using Resurrect.Us.Semantic.Semantic;
 using Resurrect.Us.Web.Service.Wrappers;
 using Serilog;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Resurrect.Us.Web
 {
@@ -52,6 +54,15 @@ namespace Resurrect.Us.Web
             services.AddTransient<IHashService, HashService>();
             services.AddTransient<IUrlShortenerService, UrlShortenerService>();
             services.AddTransient<IHttpClientWrapper, HttpClientWrapper>();
+            services.AddDistributedServiceStackRedisCache(options => {
+                Configuration.GetSection("redis").Bind(options);
+                IPAddress ip;
+                if (!IPAddress.TryParse(options.Host, out ip))
+                {
+                    options.Host = Dns.GetHostAddressesAsync(options.Host)
+                    .Result.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork).ToString();
+                }
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,6 +98,12 @@ namespace Resurrect.Us.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ShortenedUrlRecordRecordsContext>();
+                context.Database.Migrate();
+            }
         }
     }
 }

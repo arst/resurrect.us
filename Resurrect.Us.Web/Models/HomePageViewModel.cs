@@ -11,5 +11,7 @@ namespace Resurrect.Us.Web.Models
         [Required]
         [Url]
         public string Url { get; set; }
+
+        public bool GoogleForMe { get; set; }
     }
 }

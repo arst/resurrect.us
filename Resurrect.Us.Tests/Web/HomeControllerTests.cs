@@ -82,7 +82,7 @@ namespace Resurrect.Us.Tests.Web
             HomePageViewModel viewModel = new HomePageViewModel();
             viewModel.Url = "http://test.test";
             var result = await sut.Index(viewModel);
-            shortenerMock.Verify(s => s.GetShortUrlAsync(It.Is<string>(url => url == viewModel.Url)), Times.Once());
+            shortenerMock.Verify(s => s.GetShortUrlAsync(It.Is<string>(url => url == viewModel.Url), It.IsAny<bool>()), Times.Once());
         }
     }
 }

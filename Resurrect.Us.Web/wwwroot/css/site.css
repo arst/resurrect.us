@@ -4,6 +4,11 @@
     font-family: 'Oswald', sans-serif;
 }
 
+.input-group-centered {
+    width: 100%;
+    text-align: center;
+}
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {

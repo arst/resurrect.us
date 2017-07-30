@@ -14,6 +14,12 @@
                     <button class="btn btn-success" type="submit">Get short URL</button>
                 </span>
             </div>
+            <div class="input-group input-group-centered">
+                <label asp-for="GoogleForMe">
+                    <input asp-for="GoogleForMe" type="checkbox"/>
+                    Google for me!
+                </label>
+            </div>
             <span asp-validation-for="Url" class="text-danger"></span>
         </form>
     </div>

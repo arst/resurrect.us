@@ -35,7 +35,7 @@ namespace Resurrect.Us.Web.Controllers
             if (ModelState.IsValid)
             {
                 logger.LogInformation("Processing url - {0}", urlRequest.Url);
-                var shortUrl = await this.urlShortenerService.GetShortUrlAsync(urlRequest.Url);
+                var shortUrl = await this.urlShortenerService.GetShortUrlAsync(urlRequest.Url, urlRequest.GoogleForMe);
                 var request = HttpContext.Request;
                 var model = String.Format("{0}://{1}/{2}",request.Scheme, request.Host.ToUriComponent(), shortUrl);
                 return View("Result",model);

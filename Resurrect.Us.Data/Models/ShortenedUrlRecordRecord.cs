@@ -20,6 +20,7 @@ namespace Resurrect.Us.Data.Models
         public decimal AccessCount { get; set; }
         public string Title { get; set; }
         public  virtual List<Keyword> Keywords { get; set; }
+        public bool ShallBeGoogled { get; set; }
 
     }
 }

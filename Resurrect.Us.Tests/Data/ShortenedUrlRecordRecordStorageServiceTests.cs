@@ -132,7 +132,7 @@ namespace Resurrect.Us.Tests.Data
         }
 
         [Fact]
-        public async Task ShouldThrowArgeumntExceptionWhenRecordToUpdateIsNotFound()
+        public void ShouldThrowArgeumntExceptionWhenRecordToUpdateIsNotFound()
         {
             var ctx = this.GetContextMock();
             var sut = new ShortenedUrlRecordRecordStorageService(ctx);
