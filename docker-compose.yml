@@ -3,8 +3,6 @@ version: '3'
 services:
   resurrect.us.web:
     image: resurrect.us.web
-    labels:
-      - "com.microsoft.visualstudio.targetoperatingsystem=linux"
     ports:
        - 5001:80
     build:
@@ -19,4 +17,4 @@ services:
     image: "microsoft/mssql-server-linux"
     environment:
       SA_PASSWORD: "12Admin345"
-      CCEPT_EULA: "Y"
+      ACCEPT_EULA: "Y"
