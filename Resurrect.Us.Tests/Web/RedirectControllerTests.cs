@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Resurrect.Us.Data.Models;
@@ -26,12 +27,14 @@ namespace Resurrect.Us.Tests.Web
                 this.UrlCheckerMock = new Mock<IUrlCheckerService>();
                 this.UrlShortenerMock = new Mock<IUrlShortenerService>();
                 this.LoggerMock = new Mock<ILogger<RedirectController>>();
+                this.CacheMock = new Mock<IDistributedCache>();
             }
 
             public Mock<IWaybackService> WaybackMock { get; set; }
             public Mock<IUrlCheckerService> UrlCheckerMock { get; set; }
             public Mock<IUrlShortenerService> UrlShortenerMock { get; set; }
             public Mock<ILogger<RedirectController>> LoggerMock { get; set; }
+            public Mock<IDistributedCache> CacheMock { get; set; }
         }
 
         [Fact]
@@ -58,7 +61,8 @@ namespace Resurrect.Us.Tests.Web
             var sut = new RedirectController(sutContructoCtx.WaybackMock.Object, 
                                              sutContructoCtx.UrlCheckerMock.Object,
                                              sutContructoCtx.UrlShortenerMock.Object,
-                                             sutContructoCtx.LoggerMock.Object);
+                                             sutContructoCtx.LoggerMock.Object,
+                                             sutContructoCtx.CacheMock.Object);
             var result = sut.Index("test_id");
             sutContructoCtx.UrlShortenerMock.Verify(s => s.GetDeshortenedUrl(It.Is<string>(url => url == "test_id")), Times.Once());
         }
@@ -87,7 +91,8 @@ namespace Resurrect.Us.Tests.Web
             var sut = new RedirectController(sutContructoCtx.WaybackMock.Object,
                                              sutContructoCtx.UrlCheckerMock.Object,
                                              sutContructoCtx.UrlShortenerMock.Object,
-                                             sutContructoCtx.LoggerMock.Object);
+                                             sutContructoCtx.LoggerMock.Object,
+                                             sutContructoCtx.CacheMock.Object);
             var result = (await sut.Index("test_id")) as RedirectToActionResult;
 
             Assert.Equal(result.ActionName, "Index");
@@ -120,7 +125,8 @@ namespace Resurrect.Us.Tests.Web
             var sut = new RedirectController(sutContructoCtx.WaybackMock.Object,
                                              sutContructoCtx.UrlCheckerMock.Object,
                                              sutContructoCtx.UrlShortenerMock.Object,
-                                             sutContructoCtx.LoggerMock.Object);
+                                             sutContructoCtx.LoggerMock.Object,
+                                             sutContructoCtx.CacheMock.Object);
             var result = (await sut.Index("test_id")) as RedirectToActionResult;
             sutContructoCtx.UrlCheckerMock.Verify(u => u.CheckUrl(It.Is<string>(url => url == "test_url")));
         }
@@ -154,7 +160,8 @@ namespace Resurrect.Us.Tests.Web
             var sut = new RedirectController(sutContructoCtx.WaybackMock.Object,
                                              sutContructoCtx.UrlCheckerMock.Object,
                                              sutContructoCtx.UrlShortenerMock.Object,
-                                             sutContructoCtx.LoggerMock.Object);
+                                             sutContructoCtx.LoggerMock.Object,
+                                             sutContructoCtx.CacheMock.Object);
             var result = (await sut.Index("test_id")) as RedirectResult;
             Assert.Equal(result.Url, "test_url");
             Assert.Equal(result.Permanent, true);
@@ -195,7 +202,8 @@ namespace Resurrect.Us.Tests.Web
             var sut = new RedirectController(sutContructoCtx.WaybackMock.Object,
                                               sutContructoCtx.UrlCheckerMock.Object,
                                               sutContructoCtx.UrlShortenerMock.Object,
-                                             sutContructoCtx.LoggerMock.Object);
+                                             sutContructoCtx.LoggerMock.Object,
+                                             sutContructoCtx.CacheMock.Object);
             var result = (await sut.Index("test_id")) as RedirectResult;
             Assert.Equal(result.Url, "wayback_test_url");
             Assert.Equal(result.Permanent, false);
