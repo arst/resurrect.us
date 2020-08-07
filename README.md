@@ -1,6 +1,6 @@
 # Resurrect.us
 
-Simple URL shortener to study ASP.NET Core.
+Simple URL shortener to learn ASP.NET Core basics.
 
 # How to run
 
